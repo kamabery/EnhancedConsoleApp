@@ -1,31 +1,53 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 
 namespace EnhancedConsoleApp
 {
     class Program
     {
-        static void Main(string[] args)
+        private static IServiceProvider _serviceProvider;
+        private static IConfigurationRoot _configurationRoot;
+
+        static async Task Main(string[] args)
         {
-            IServiceCollection services = new ServiceCollection();
-            // Startup.cs finally :)
-            Startup startup = new Startup();
-            startup.ConfigureServices(services);
-            IServiceProvider serviceProvider = services.BuildServiceProvider();
 
-            //configure console logging
-            services.AddLogging(opt => opt.AddConsole());
+            RegisterService();
+            var service = _serviceProvider.GetService<IMyService>();
+            await service.MyServiceMethod();
+            DisposeServices();
+        }
 
-            var logger = serviceProvider.GetService<ILoggerFactory>()
-                .CreateLogger<Program>();
+        private static void RegisterService()
+        {
+            var collection = new ServiceCollection();
+            collection.AddLogging(LoggingBuilder);
+            collection.AddScoped<IMyService, MyService>();
+            var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
+            _configurationRoot = builder.Build();
+            collection.AddSingleton(_configurationRoot);
+            _serviceProvider = collection.BuildServiceProvider();
+        }
 
-            logger.LogDebug("Logger is working!");
+        private static void DisposeServices()
+        {
+            if (_serviceProvider == null)
+            {
+                return;
+            }
+            if (_serviceProvider is IDisposable)
+            {
+                ((IDisposable)_serviceProvider).Dispose();
+            }
+        }
 
-            // Get Service and call method
-            var service = serviceProvider.GetService<IMyService>();
-            service.MyServiceMethod();
+
+        private static void LoggingBuilder(ILoggingBuilder loggingBuilder)
+        {
+            loggingBuilder.AddConsole();
+            loggingBuilder.SetMinimumLevel(LogLevel.Information);
         }
     }
 }

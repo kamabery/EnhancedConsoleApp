@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "Kurt Mabery",
+    "classifications": [ "Common", "Console", "C#8" ],
+    "name": "Enhanced Console",
+    "identity": "enhancedconsole",
+    "description": "Enhanced Console App",
+    "shortName": "coolconsonsole",
+    "tags": {
+      "language": "C#"
+    },
+    "sourceName": "EnhancedConsoleApp",
+    "preferNameDirectory": true,
+    "sources": [{ "modifiers": [{ "exclude": [".vs/**", ".git/**"] }] }]
+  }
