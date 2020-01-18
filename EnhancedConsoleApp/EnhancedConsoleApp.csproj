@@ -10,6 +10,8 @@
     <RepositoryType>Github</RepositoryType>
     <Copyright />
     <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
