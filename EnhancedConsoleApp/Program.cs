@@ -2,52 +2,33 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace EnhancedConsoleApp
 {
     class Program
     {
-        private static IServiceProvider _serviceProvider;
-        private static IConfigurationRoot _configurationRoot;
-
         static async Task Main(string[] args)
         {
-
-            RegisterService();
-            var service = _serviceProvider.GetService<IMyService>();
-            await service.MyServiceMethod();
-            DisposeServices();
-        }
-
-        private static void RegisterService()
-        {
+            // Setup Service Configuration
             var collection = new ServiceCollection();
-            collection.AddLogging(LoggingBuilder);
-            collection.AddScoped<IMyService, MyService>();
             var builder = new ConfigurationBuilder().AddJsonFile("appsettings.json");
-            _configurationRoot = builder.Build();
-            collection.AddSingleton(_configurationRoot);
-            _serviceProvider = collection.BuildServiceProvider();
-        }
+            var configurationRoot = builder.Build();
+            var startup = new Startup(configurationRoot);
+            startup.ConfigureServices(collection);
 
-        private static void DisposeServices()
-        {
-            if (_serviceProvider == null)
+            // Setup Configuration
+            collection.AddSingleton(configurationRoot);
+            collection.AddLogging(startup.Configure);
+
+            var serviceProvider = collection.BuildServiceProvider();
+
+            // Setup Logging
+            startup.Run(serviceProvider);
+            
+            if (serviceProvider != null && serviceProvider is IDisposable)
             {
-                return;
+                serviceProvider.Dispose();
             }
-            if (_serviceProvider is IDisposable)
-            {
-                ((IDisposable)_serviceProvider).Dispose();
-            }
-        }
-
-
-        private static void LoggingBuilder(ILoggingBuilder loggingBuilder)
-        {
-            loggingBuilder.AddConsole();
-            loggingBuilder.SetMinimumLevel(LogLevel.Information);
         }
     }
 }

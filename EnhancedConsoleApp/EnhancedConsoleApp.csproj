@@ -10,10 +10,12 @@
     <RepositoryType>Github</RepositoryType>
     <Copyright />
     <PackageLicenseFile>License.txt</PackageLicenseFile>
-    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
-    <Version>1.1.0</Version>
+    <Version>1.1.2</Version>
+    <PackageTags>c</PackageTags>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <NETCorePlatformsImplicitPackageVersion>3.1</NETCorePlatformsImplicitPackageVersion>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.0" />
@@ -30,5 +32,4 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
-
 </Project>
