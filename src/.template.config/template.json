@@ -1,0 +1,15 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "Kurt Mabery",
+    "classifications": [ "Common", "Console"],
+    "name": "EnhancedConsole",
+    "identity": "kamconsole",
+    "description": "Console with DI, and logging",
+    "shortName": "coolconsole",
+    "tags": {
+      "language": "C#"
+    },
+    "sourceName": "Kam.Console",
+    "preferNameDirectory": true,
+    "sources": [{ "modifiers": [{ "exclude": [".vs/**", ".git/**"] }] }]
+  }
